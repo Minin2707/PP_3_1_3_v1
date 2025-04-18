@@ -47,7 +47,7 @@ public class AdminController {
     public String saveUser(@ModelAttribute("user") @Valid User user,
                            BindingResult bindingResult,
                            Model model) {
-        User existingUser = userService.findByUsername(user.getEmail());
+        User existingUser = userService.findByUserName(user.getEmail());
         if (existingUser != null && (user.getId() == null || !existingUser.getId().equals(user.getId()))) {
             bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
         }

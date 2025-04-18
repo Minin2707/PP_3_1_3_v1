@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping
     public String printUser(Model model, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("currentUser", userService.findByUsername(userDetails.getUsername()));
+        model.addAttribute("currentUser", userService.findByUserName(userDetails.getUsername()));
         return "user";
     }
 
