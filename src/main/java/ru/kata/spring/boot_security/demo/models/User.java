@@ -18,7 +18,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
@@ -53,9 +52,8 @@ public class User implements UserDetails {
     @Column(name = "age")
     private Integer age;
 
-//    @Min(value = 5)
-    @NotNull(message = "введите пароль")
-    @Size(min=5,message = "пароль должен быть не менее 5 символов")
+//    @NotNull(message = "введите пароль")
+//    @Size(min=5,message = "пароль должен быть не менее 5 символов")
     @Column(name = "password")
     private String password;
 

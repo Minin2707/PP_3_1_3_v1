@@ -39,27 +39,37 @@ public class AdminController {
     public String addUserForm(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleService.getAllRoles());
+        model.addAttribute("actionUrl", "/admin/save");
         return "add-user";
     }
 
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") @Valid User user,
-                           BindingResult bindingResult,
-                           Model model) {
+                                   BindingResult bindingResult,
+                                   Model model) {
+        boolean isNew = user.getId() == null;
+
         User existingUser = userService.findByUserName(user.getEmail());
-        if (existingUser != null && (user.getId() == null || !existingUser.getId().equals(user.getId()))) {
+
+        if (existingUser != null && (isNew || !existingUser.getId().equals(user.getId()))) {
             bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
+        }
+
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            bindingResult.rejectValue("password", "error.user", "Пароль обязателен");
+        } else if (user.getPassword().length() < 5) {
+            bindingResult.rejectValue("password", "error.user", "Пароль должен быть не менее 5 символов");
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "add-user";
         }
-
         userService.saveUser(user);
         return "redirect:/admin";
     }
+
 
 
     @GetMapping("/updateUser")
@@ -67,7 +77,34 @@ public class AdminController {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("allRoles", roleService.getAllRoles());
+        model.addAttribute("actionUrl", "/admin/update");
         return "add-user";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute("user") @Valid User user,
+                             BindingResult bindingResult,
+                             Model model) {
+        User existingUser = userService.findByUserName(user.getEmail());
+
+        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+            bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
+        }
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (user.getPassword().length() < 5) {
+                bindingResult.rejectValue("password", "error.user", "пароль должен быть не менее 5 символов");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allRoles", roleService.getAllRoles());
+            return "add-user";
+        }
+
+        userService.updateUser(user);
+
+        return "redirect:/admin";
     }
 
     @PostMapping("/deleteUser")
