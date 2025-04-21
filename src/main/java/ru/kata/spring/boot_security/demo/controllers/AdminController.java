@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.kata.spring.boot_security.demo.customExeption.BusinessValidationExeption;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -48,26 +49,19 @@ public class AdminController {
     public String saveUser(@ModelAttribute("user") @Valid User user,
                                    BindingResult bindingResult,
                                    Model model) {
-        boolean isNew = user.getId() == null;
-
-        User existingUser = userService.findByUserName(user.getEmail());
-
-        if (existingUser != null && (isNew || !existingUser.getId().equals(user.getId()))) {
-            bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
-        }
-
-        if (user.getPassword() == null || user.getPassword().isBlank()) {
-            bindingResult.rejectValue("password", "error.user", "Пароль обязателен");
-        } else if (user.getPassword().length() < 5) {
-            bindingResult.rejectValue("password", "error.user", "Пароль должен быть не менее 5 символов");
-        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "add-user";
         }
-        userService.saveUser(user);
-        return "redirect:/admin";
+        try{
+            userService.saveUser(user);
+            return "redirect:/admin";
+        }catch (BusinessValidationExeption ex){
+            bindingResult.rejectValue(ex.getField(), "", ex.getMessage());
+            return "add-user";
+        }
+
     }
 
 
@@ -87,9 +81,9 @@ public class AdminController {
                              Model model) {
         User existingUser = userService.findByUserName(user.getEmail());
 
-        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
-            bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
-        }
+//        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+//            bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
+//        }
 
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             if (user.getPassword().length() < 5) {
