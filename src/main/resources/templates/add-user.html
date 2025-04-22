@@ -92,38 +92,7 @@
 </head>
 <body>
 <h1>Add New User</h1>
-<!--<form th:action="@{/admin/save}" th:method="post" th:object="${user}">-->
-<!--  <input type="hidden" th:field="*{id}">-->
-<!--  <label for="firstName">First Name:</label>-->
-<!--  <input type="text" id="firstName" th:field="*{firstName}" placeholder="Enter name" th:classappend="${#fields.hasErrors('firstName')} ? 'error-field' : ''">-->
-<!--  <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></div>-->
 
-<!--  <label for="lastName">Last Name:</label>-->
-<!--  <input type="text" id="lastName" th:field="*{lastName}" placeholder="Enter last name" th:classappend="${#fields.hasErrors('lastName')} ? 'error-field' : ''">-->
-<!--  <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></div>-->
-
-<!--  <label for="email">Email:</label>-->
-<!--  <input type="text" id="email" th:field="*{email}" placeholder="Enter e-mail" th:classappend="${#fields.hasErrors('email')} ? 'error-field' : ''">-->
-<!--  <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>-->
-
-<!--  <label for="age">Age:</label>-->
-<!--  <input type="number" id="age" th:field="*{age}" placeholder="Enter age" th:classappend="${#fields.hasErrors('age')} ? 'error-field' : ''">-->
-<!--  <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="error"></div>-->
-
-<!--  <label for="password">Password:</label>-->
-<!--  <input type="password" id="password" th:field="*{password}" placeholder="Enter password" th:classappend="${#fields.hasErrors('password')} ? 'error-field' : ''">-->
-<!--  <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>-->
-
-<!--  <label for="roles">Roles:</label>-->
-<!--  <div th:each="role : ${allRoles}">-->
-<!--    <input id="roles" type="checkbox"-->
-<!--           th:field="*{roles}"-->
-<!--           th:value="${role.id}"-->
-<!--           th:text="${role.name}">-->
-<!--  </div>-->
-
-<!--  <input type="submit" value="Ok">-->
-<!--</form>-->
 
 <form th:action="@{${actionUrl}}" th:method="post" th:object="${user}">
 
@@ -160,7 +129,8 @@
     <input id="roles" type="checkbox"
            th:field="*{roles}"
            th:value="${role.id}"
-           th:text="${role.name}">
+           th:text="${role.name}"
+           th:checked="${user.roles != null && user.roles.contains(role)}">
   </div>
 
   <input type="submit" value="Ok">

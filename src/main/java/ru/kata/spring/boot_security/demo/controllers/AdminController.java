@@ -50,8 +50,9 @@ public class AdminController {
                                    BindingResult bindingResult,
                                    Model model) {
 
+        model.addAttribute("allRoles", roleService.getAllRoles());
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.getAllRoles());
             return "add-user";
         }
         try{
@@ -61,7 +62,6 @@ public class AdminController {
             bindingResult.rejectValue(ex.getField(), "", ex.getMessage());
             return "add-user";
         }
-
     }
 
     @GetMapping("/updateUser")

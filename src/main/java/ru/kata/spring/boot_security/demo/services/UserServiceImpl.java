@@ -59,12 +59,10 @@ public class UserServiceImpl implements UserService {
             throw new BusinessValidationExeption("email","Такой e-mail уже зарегистрирован");
         }
 
-        if(user.getPassword().length() < 5) {
-            throw new BusinessValidationExeption("password","Пароль должен быть не менее 5 символов");
-        }
-
-        if(user.getPassword() == null || user.getPassword().isEmpty()) {
+        if(user.getPassword() == null || user.getPassword().trim().isEmpty()) {
             throw new BusinessValidationExeption("password","Пароль обязателен");
+        }else if(user.getPassword().length() < 5) {
+            throw new BusinessValidationExeption("password","Пароль должен быть не менее 5 символов");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
