@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 import ru.kata.spring.boot_security.demo.customExeption.BusinessValidationExeption;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
@@ -77,6 +76,20 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user) {
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (!existingUser.getEmail().equals(user.getEmail())) {
+            User userWithSameEmail = userRepository.findByEmail(user.getEmail());
+            if (userWithSameEmail != null && !userWithSameEmail.getId().equals(user.getId())) {
+                throw new BusinessValidationExeption("email", "Такой e-mail уже зарегистрирован");
+            }
+        }
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (user.getPassword().length() < 5) {
+                throw new BusinessValidationExeption("password", "Пароль должен быть не менее 5 символов");
+            }
+        }
+
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setAge(user.getAge());
@@ -91,9 +104,6 @@ public class UserServiceImpl implements UserService {
                 existingUser.setPassword(rawPassword);
             }
         }
-
-
-
         userRepository.save(existingUser);
     }
 

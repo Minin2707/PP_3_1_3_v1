@@ -64,8 +64,6 @@ public class AdminController {
 
     }
 
-
-
     @GetMapping("/updateUser")
     public String updateUserForm(@RequestParam Long id, Model model) {
         User user = userService.findUserById(id);
@@ -79,26 +77,19 @@ public class AdminController {
     public String updateUser(@ModelAttribute("user") @Valid User user,
                              BindingResult bindingResult,
                              Model model) {
-        User existingUser = userService.findByUserName(user.getEmail());
-
-//        if (existingUser != null && !existingUser.getId().equals(user.getId())) {
-//            bindingResult.rejectValue("email", "error.user", "Такой e-mail уже зарегистрирован");
-//        }
-
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            if (user.getPassword().length() < 5) {
-                bindingResult.rejectValue("password", "error.user", "пароль должен быть не менее 5 символов");
-            }
-        }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "add-user";
         }
 
-        userService.updateUser(user);
-
-        return "redirect:/admin";
+        try {
+            userService.updateUser(user);
+            return "redirect:/admin";
+        } catch (BusinessValidationExeption ex) {
+            bindingResult.rejectValue(ex.getField(), "", ex.getMessage());
+            model.addAttribute("allRoles", roleService.getAllRoles());
+            return "add-user";
+        }
     }
 
     @PostMapping("/deleteUser")
