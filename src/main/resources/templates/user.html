@@ -1,77 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User Info</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #eaeaea;
-        }
-
-
-
-        .logout{
-            background-color: rgb(0,0,0);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-        }
-        .logout:hover{
-            background-color: rgb(20,228,221);
-        }
-
-
-
-    </style>
+    <title>User page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    <h1>Your Info</h1>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" class="logout" style="float: right;">Logout</button>
+
+<!-- Навбар -->
+<nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-text text-white" th:text="${user.email} + ' with roles: ' + ${user.roles}"></span>
+    <form th:action="@{/logout}" method="post" class="ms-auto">
+        <button type="submit" class="btn btn-outline-light">Logout</button>
     </form>
-    <br>
-    <table>
-        <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Age</th>
-        </tr>
-        </thead>
+</nav>
 
-        <tbody>
+<!-- Контейнер всей страницы -->
+<div class="container-fluid">
+    <div class="row">
 
-            <td th:text="${currentUser.firstName}"></td>
-            <td th:text="${currentUser.lastName}"></td>
-            <td th:text="${currentUser.email}"></td>
-            <td th:text="${currentUser.age}"></td>
+        <!-- Боковая панель -->
+        <div class="col-md-2 bg-white p-0">
+<!--            <div class="d-flex flex-column p-3 border-end min-vh-100">-->
+            <div class="d-flex flex-column p-3 bg-light border-end p-0" style="min-width: 200px; height: 100vh;">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/user" class="nav-link active text-start">User</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
+        <!-- Основной контент -->
+        <div class="col-md-10 bg-light p-4">
+            <h2 class="mb-4">User information-page</h2>
 
+            <!-- Карточка с таблицей -->
+            <div class="card">
+                <div class="card-header">
+                    About user
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.firstName}"></td>
+                            <td th:text="${user.lastName}"></td>
+                            <td th:text="${user.age}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${#strings.listJoin(user.roles, ', ')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        </tbody>
-
-    </table>
-
+        </div>
+    </div>
 </div>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
