@@ -10,7 +10,7 @@ import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
+
 import java.util.Set;
 
 

@@ -51,8 +51,6 @@ public class User implements UserDetails {
     @Column(name = "age")
     private Integer age;
 
-//    @NotNull(message = "введите пароль")
-//    @Size(min=5,message = "пароль должен быть не менее 5 символов")
     @Column(name = "password")
     private String password;
 
