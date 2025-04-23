@@ -23,8 +23,8 @@ public class UserController {
     public String printUser(Model model, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.findByUserName(userDetails.getUsername());
-        model.addAttribute("user", user); // Изменили "currentUser" на "user"
-        return "user"; // Убедитесь, что имя шаблона совпадает с вашим файлом
+        model.addAttribute("user", user);
+        return "user";
     }
 
 

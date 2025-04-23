@@ -55,26 +55,16 @@ public class AdminController {
                                    BindingResult bindingResult,
                                    Model model, Authentication authentication) {
 
-
-
         if (bindingResult.hasErrors()) {
-            User currentUser = (User) authentication.getPrincipal();
-            model.addAttribute("formHasErrors", true);
-            model.addAttribute("currentUser", currentUser);
-            model.addAttribute("allUsers", userService.getAllUsers());
-            model.addAttribute("allRoles", roleService.getAllRoles());
+            prepareModelWithErrorData(model,authentication,user);
             return "admin-page";
         }
         try{
             userService.saveUser(user);
             return "redirect:/admin";
         }catch (BusinessValidationExeption ex){
-            bindingResult.rejectValue(ex.getField(), "", ex.getMessage());
-            User currentUser = (User) authentication.getPrincipal();
-            model.addAttribute("formHasErrors", true);
-            model.addAttribute("currentUser", currentUser);
-            model.addAttribute("allUsers", userService.getAllUsers());
-            model.addAttribute("allRoles", roleService.getAllRoles());
+            bindingResult.rejectValue(ex.getField(), "error.user", ex.getMessage());
+            prepareModelWithErrorData(model,authentication,user);
             return "admin-page";
         }
     }
@@ -86,12 +76,7 @@ public class AdminController {
                              Model model, Authentication authentication) {
 
         if (bindingResult.hasErrors()) {
-            User currentUser = (User) authentication.getPrincipal();
-            model.addAttribute("formHasErrors", true);
-            model.addAttribute("currentUser", currentUser);
-            model.addAttribute("allRoles", roleService.getAllRoles());
-            model.addAttribute("allUsers", userService.getAllUsers());
-            model.addAttribute("user", user);
+            prepareModelWithErrorData(model,authentication,user);
             return "admin-page";
         }
 
@@ -100,13 +85,7 @@ public class AdminController {
             return "redirect:/admin";
         } catch (BusinessValidationExeption ex) {
             bindingResult.rejectValue(ex.getField(), "", ex.getMessage());
-            User currentUser = (User) authentication.getPrincipal();
-            model.addAttribute("formHasErrors", true);
-            model.addAttribute("currentUser", currentUser);
-            model.addAttribute("user", user);
-            model.addAttribute("allUsers", roleService.getAllRoles());
-            model.addAttribute("allRoles", roleService.getAllRoles());
-
+            prepareModelWithErrorData(model,authentication,user);
             return "admin-page";
         }
     }
@@ -117,16 +96,18 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/getUser/{id}")
-    @ResponseBody
-    public User getUserForEdit(@PathVariable Long id) {
-        return userService.findUserById(id);
-    }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
+
+
+    private void prepareModelWithErrorData(Model model, Authentication authentication, User user) {
+        User currentUser = (User) authentication.getPrincipal();
+        model.addAttribute("editMode", true);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("user", user);
+        model.addAttribute("allUsers", userService.getAllUsers());
         model.addAttribute("allRoles", roleService.getAllRoles());
-        return "admin-page";
+        model.addAttribute("openEditModalId", user.getId());
+        model.addAttribute("activeTab", "newUser");
     }
 
 }

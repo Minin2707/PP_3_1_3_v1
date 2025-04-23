@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -38,11 +39,11 @@ public class User implements UserDetails {
     @Column(name="email", unique=true)
     private String email;
 
-    @NotEmpty(message = "имя обязательно")
+    @NotBlank(message = "имя обязательно")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotEmpty(message = "фамилия обязательна")
+    @NotBlank(message = "фамилия обязательна")
     @Column(name = "last_name")
     private String lastName;
 
@@ -50,6 +51,7 @@ public class User implements UserDetails {
     @NotNull(message = "возраст обязателен")
     @Column(name = "age")
     private Integer age;
+
 
     @Column(name = "password")
     private String password;

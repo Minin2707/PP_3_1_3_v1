@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.kata.spring.boot_security.demo.customExeption.BusinessValidationExeption;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
@@ -14,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Validated
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -88,6 +90,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setAge(user.getAge());
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         String rawPassword = user.getPassword();
         if (rawPassword != null && !rawPassword.isBlank()) {
-            if (!rawPassword.matches("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}")) {
+            if (!passwordEncoder.matches(rawPassword, existingUser.getPassword())) {
                 existingUser.setPassword(passwordEncoder.encode(rawPassword));
             } else {
                 existingUser.setPassword(rawPassword);
