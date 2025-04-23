@@ -10,7 +10,7 @@
 <body>
 
 
-<!--------------------------------------Верхняя панель----------------------------------------------------------->
+чё
 <header>
   <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
     <div class="container-fluid">
@@ -36,7 +36,7 @@
     </div>
   </nav>
 </header>
-<!---------------------Вкладки-------------------------->
+
 <!--<div class="container">-->
 <div class="row" style="height: 100vh;">
   <div class="col-md-2">
@@ -52,11 +52,11 @@
   <div class="col-md-10 bg-light" style="height: 100%; padding: 15px;">
     <div class="tab-content h-100">
 
-      <!----------------------------  вкладка для ADMIN-------------------------------->
+
 
       <div role="tabpanel" class="tab-pane active h-100" id="admin">
         <h1>Admin panel</h1>
-        <!--------------------------------Навигац. панель All user и New user----------->
+
         <div class="container">
           <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -70,7 +70,7 @@
           <div class="tab-content">
 
 
-          <!--------------------------------Навигац. панель All user----------->
+
             <div class="tab-pane active" id="usersTable">
               <div class="card">
                 <div class="card-header">
@@ -102,7 +102,7 @@
                                   th:text="${role.toString() + ' '}">
                         </th:block>
                       </td>
-                      <!------------------------------------------------Кнопка редактирования------------------------------>
+
                       <td>
                         <button type="button" class="btn btn-info text-white"
                                 data-bs-toggle="modal"
@@ -111,13 +111,13 @@
 
                         </button>
                       </td>
-                      <!----------------------------------------------------Кнопка удаления------------------------------->
+
                       <td>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                 th:data-bs-target="${'#delete' + user.id}">Delete
                         </button>
                       </td>
-                      <!---------------------------------------------------Модальное окно редактирования-------------------->
+
 
                       <div class="modal fade" th:id="${'edit' + user.id}" tabindex="-1"
                            aria-hidden="true" aria-labelledby="editModalLabel" >
@@ -226,7 +226,6 @@
                         </form>
                       </div>
 
-                      <!------------------------------------ модальное окно Delete ------------------>
 
                       <div class="modal fade" th:id="${'delete' + user.id}" tabindex="-1"
                            aria-hidden="true" aria-labelledby="deleteModalLabel" id="deleteModal">
@@ -329,7 +328,7 @@
                 </div>
               </div>
             </div>
-            <!-----------------------вкладка New user--------------------->
+
             <div class="tab-pane" id="newUser" role="tabpanel" aria-labelledby="nav-profile-tab">
               <div class="card">
                 <div class="card-header">
@@ -424,8 +423,6 @@
         </div>
       </div>
 
-      <!----------------------------  вкладка для USER-------------------------------->
-
       <div role="tabpanel" class="tab-pane h-100" id="user">
         <h1>User information-page</h1>
         <div class="card">
@@ -467,13 +464,12 @@
   </div>
 
 </div>
-<!--</div>-->
 
 
-<!-- Подключение библиотеки jQuery -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Подключение библиотеки Bootstrap JavaScript -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
 
@@ -486,12 +482,8 @@
 
 <script>
   $(window).on('load', function () {
-    // Получаем идентификатор активной вкладки из атрибута модели
     let activeTable = "${activeTable}";
-
-    // Переключаем на соответствующую вкладку
     let tabSelector = '.nav-tabs a[href="#' + activeTable + '"]';
-
     $(tabSelector).tab('show');
   });
 </script>
